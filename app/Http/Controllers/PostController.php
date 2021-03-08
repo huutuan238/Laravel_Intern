@@ -65,13 +65,6 @@ class PostController extends Controller
                     ->join('comments','comments.post_id', '=', 'posts.id')
                     ->where('comments.post_id', $id)
                     ->get();
-
-        // $comments = Comment::join('posts','posts.id','=','comments.post_id')
-        // ->where('comments.post_id', $id)
-        // ->get();
-        // echo "<pre>";
-        // print_r($comments);
-        // echo "</pre>";
         return view('post.show')->with('post', $post)->with('comments', $comments);
     }
 

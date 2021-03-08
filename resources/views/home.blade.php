@@ -54,10 +54,12 @@
                     <p>{{ $post->content }}</p>
                   </div>
                   <div class="line-divider"></div>
+                  @foreach ($comments as $key=>$comment)
                   <div class="post-comment">
                     <img src="images/users/user-11.jpg" alt="" class="profile-photo-sm" />
-                    <p><a href="timeline.html" class="profile-link">Diana </a><i class="em em-laughing"></i> This is comment</p>
+                    <p><a href="timeline.html" class="profile-link">Diana </a><i class="em em-laughing"></i>{{ $comment->content }}</p>
                   </div>
+                  @endforeach
                   <!-- <div class="post-comment">
                     <form action="{{URL::to('save-comment')}}" method="post">
                       <img src="images/users/user-1.jpg" alt="" class="profile-photo-sm" />

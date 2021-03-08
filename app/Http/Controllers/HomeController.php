@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;
 use App\Models\Post;
+use DB;
 
 class HomeController extends Controller
 {
@@ -31,6 +32,9 @@ class HomeController extends Controller
     public function index()
     {
         $all_post = Post::all();
-        return view('home')->with('all_post', $all_post);
+        $comments = DB::table('posts')
+            ->join('comments','comments.post_id', '=', 'posts.id')
+            ->get();
+        return view('home')->with('all_post', $all_post)->with('comments', $comments);
     }
 }
