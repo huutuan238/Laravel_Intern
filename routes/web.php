@@ -13,10 +13,8 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -31,6 +29,7 @@ Route::get('/post/{post_id}', 'PostController@show');
 
 //Comment
 Route::get('/add-comment', 'CommentController@create');
+Route::post('/save-comment/{post_id}','CommentController@store');
 Route::get('/edit-comment/{comment_id}', 'CommentController@edit');
 Route::get('/delete-comment/{comment_id}', 'CommentController@delete');
 

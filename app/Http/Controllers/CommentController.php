@@ -2,7 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\User;use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests;
+use App\Models\Post;
+use App\Models\Comment;
+
+
+
 
 class CommentController extends Controller
 {
@@ -32,9 +41,17 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$post_id)
     {
-        //
+        // $post_id = Post::find($request->post_id);
+        // $data = $request->all();
+        // print_r($data);
+        $comment = new Comment();
+        $comment->content = $request->content;
+        $comment->user_id = auth()->id();
+        $comment->post_id = $post_id;
+        $comment->save();
+        return Redirect::to('home');
     }
 
     /**
