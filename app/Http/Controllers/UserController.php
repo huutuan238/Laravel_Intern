@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -36,7 +38,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -47,7 +49,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('profile.show');
+        $user = Auth::user();
+        return view('profile.show')->with('user', $user);
     }
 
     /**
@@ -58,7 +61,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('profile.edit');
+        $user = Auth::user();
+        return view('profile.edit')->with('user', $user);
     }
 
     /**
@@ -70,7 +74,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->image = $request->image;
+        // $user->username = auth
+        $user->image = $request->image;
+        $user->save();
+        return Redirect::to('/profile/'.$user->id);
+
     }
 
     /**

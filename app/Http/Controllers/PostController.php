@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;
 use App\Models\Post;
 use App\Models\Comment;
-// use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use DB;
 
 class PostController extends Controller
@@ -61,11 +61,10 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        $comments = DB::table('posts')
-                    ->join('comments','comments.post_id', '=', 'posts.id')
-                    ->where('comments.post_id', $id)
-                    ->get();
-        return view('post.show')->with('post', $post)->with('comments', $comments);
+        $user = Auth::user();
+        // $name = User::find($post->user_id);
+        // $comments = $post->comments;
+        return view('post.show')->with('post', $post)->with('user', $user);
     }
 
     /**
@@ -77,7 +76,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $edit_post = Post::find($id);
-        return view('post.edit')->with('edit_post', $edit_post);
+        $user = Auth::user();
+        return view('post.edit')->with('edit_post', $edit_post)->with('user', $user);
     }
 
     /**
@@ -95,7 +95,7 @@ class PostController extends Controller
         $post->user_id = auth()->id();
         $post->status = $data['status'];
         $post->save();
-        return Redirect::to('home');
+        return Redirect::to('post/'.$id);
     }
 
     /**

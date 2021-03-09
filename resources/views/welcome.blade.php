@@ -102,11 +102,12 @@
           <!-- Newsfeed Common Side Bar Left
           ================================================= -->
           <div class="col-md-3 static">
-            <div class="profile-card">
-              <img src="{{asset('images/users/user-1.jpg')}}" alt="user" class="profile-photo" />
-              <h5><a href="timeline.html" class="text-white">Sarah Cruiz</a></h5>
-              <a href="#" class="text-white"><i class="ion ion-android-person-add"></i> 1,299 followers</a>
-            </div><!--profile card ends-->
+            <a href="{{ URL::to('profile/'.$user->id)}}">
+              <div class="profile-card">
+                <img src="{{asset('images/users/user-1.jpg')}}" alt="user" class="profile-photo" />
+                <h5><p class="text-white">{{ $user->name }}</p></h5>
+              </div><!--profile card ends-->
+            </a>
             <ul class="nav-news-feed">
               <li><i class="icon ion-ios-paper"></i><div><a href="newsfeed.html">My Newsfeed</a></div></li>
               <li><i class="icon ion-ios-people"></i><div><a href="newsfeed-people-nearby.html">People Nearby</a></div></li>

@@ -2,7 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests;
+use App\Models\Post;
+use App\Models\Comment;
+use App\Models\Reply;
+use Illuminate\Support\Facades\Auth;
+use DB;
 
 class ReplyController extends Controller
 {
@@ -21,9 +31,12 @@ class ReplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($post_id, $comment_id)
     {
-        return view('reply.add');
+        // $post = Post::find($post_id);
+        $comment = Comment::find($comment_id);
+        $user = Auth::user();
+        return view('reply.add')->with('user', $user)->with('comment', $comment);
     }
 
     /**
@@ -32,9 +45,14 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $post_id, $comment_id)
     {
-        //
+        $reply = new Reply();
+        $reply->content = $request->content;
+        $reply->user_id = auth()->id();
+        $reply->comment_id = $comment_id;
+        $reply->save();
+        return Redirect::to('post/'.$post_id);
     }
 
     /**

@@ -7,10 +7,15 @@
                 <img src="{{ asset('images/users/user-5.jpg')}}" alt="user" class="profile-photo-md pull-left" />
                 <div class="post-detail">
                   <div class="user-info">
-                    <h5><a href="timeline.html" class="profile-link">Alexis Clark</a> <span class="following">following</span></h5>
+                    <h5><a href="timeline.html" class="profile-link">{{ $post->user->name }}</a></h5>
                     <p class="text-muted">{{ $post->created_at }}</p>
-                    <a href="{{URL::to('/edit-post/'.$post->id)}}" class="profile-link">edit</a>
-                    <a href="{{URL::to('/delete-post/'.$post->id)}}" class="profile-link">delete</a>
+                    <?php
+                    if($post->user_id == $user->id){
+                      ?>
+                    <a href="{{URL::to('/edit-post/'.$post->id)}}" class="profile-link">Edit</a>
+                    <a href="{{URL::to('/delete-post/'.$post->id)}}" class="profile-link">Delete</a>
+                    <?php
+                    }?>
                   </div>
                   <div class="reaction">
                     <a class="btn text-green"><i class="icon ion-thumbsup"></i> 13</a>
@@ -21,18 +26,35 @@
                     <p>{{ $post->content }}</p>
                   </div>
                   <div class="line-divider"></div>
-                  @foreach ($comments as $key=>$comment)
-                  <div class="post-comment">
-                    <img src="{{asset('images/users/user-11.jpg')}}" alt="" class="profile-photo-sm" />
-                    <p><a href="timeline.html" class="profile-link">Diana </a>{{ $comment->content }}</p>
-                  </div>
+                  @foreach ($post->comments as $comment)
+                    <div class="post-comment">
+                      <img src="{{asset('images/users/user-11.jpg')}}" alt="" class="profile-photo-sm" />
+                      <p><a href="timeline.html" class="profile-link">{{ $comment->user->name }}</a></br>{{ $comment->content }}</p>
+                      <?php
+                      if($comment->user_id == $user->id){
+                        ?>
+                      <a href="{{URL::to('/edit-comment/'.$comment->post_id.'/'.$comment->id)}}" class="profile-link">Edit</a>
+                      <a href="{{URL::to('/delete-comment/'.$comment->post_id.'/'.$comment->id)}}" onclick="return confirm('Are you sure delete comment?')" class="profile-link">Delete</a>
+                      <?php
+                      }?>
+                    </div>
+                        @foreach ($comment->replies as $reply)
+                        <div class="comment-reply">
+                          <ul>
+                            <li>Name : {{ $reply->user->name }}</li>
+                            <li>Reply content: {{ $reply->content }}</li>
+                          </ul>
+                        </div>
+                        @endforeach
+                      <a href="{{URL::to('/like/'.$user->id.'/'.$post->id.'/'.$comment->id)}}">Like</a>
+                      <a href="{{URL::to('/add-reply/'.$comment->post_id.'/'.$comment->id)}}" class="profile-link">Reply</a>
                   @endforeach
                   <div class="post-comment">
                     <form action="{{URL::to('save-comment/'.$post->id)}}" method="post">
                       @csrf
                       <img src="{{asset('images/users/user-1.jpg')}}" alt="" class="profile-photo-sm" />
                       <input name="content" type="comment" class="form-control" placeholder="Post a comment">
-                      <button class="btn btn-primary">Publish</button>
+                      <button class="btn btn-primary">Comment</button>
                     </form>
                   </div>
                 </div>

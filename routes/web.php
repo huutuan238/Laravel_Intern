@@ -30,14 +30,18 @@ Route::get('/post/{post_id}', 'PostController@show');
 //Comment
 Route::get('/add-comment', 'CommentController@create');
 Route::post('/save-comment/{post_id}','CommentController@store');
-Route::get('/edit-comment/{comment_id}', 'CommentController@edit');
-Route::get('/delete-comment/{comment_id}', 'CommentController@delete');
+Route::get('/edit-comment/{post_id}/{comment_id}', 'CommentController@edit');
+Route::post('/update-comment/{post_id}/{comment_id}', 'CommentController@update');
+Route::get('/delete-comment/{post_id}/{comment_id}', 'CommentController@destroy');
+Route::get('/like/{user_id}/{post_id}/{comment_id}', 'CommentController@like');
 
 //Reply
-Route::get('/add-reply', 'ReplyController@add');
+Route::get('/add-reply/{post_id}/{comment_id}', 'ReplyController@create');
+Route::post('/save-reply/{post_id}/{comment_id}','ReplyController@store');
 Route::get('/edit-reply/{reply_id}', 'ReplyController@edit');
 Route::get('/delete-reply/{reply_id}', 'ReplyController@delete');
 
 //User
 Route::get('/profile/{user_id}', 'UserController@show');
 Route::get('/edit-profile/{user_id}', 'UserController@edit');
+Route::post('/update-profile/{user_id}','UserController@update');
