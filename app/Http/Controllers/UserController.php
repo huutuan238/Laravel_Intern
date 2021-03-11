@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
@@ -38,7 +39,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
@@ -83,7 +84,6 @@ class UserController extends Controller
         $user->image = $request->image;
         $user->save();
         return Redirect::to('/profile/'.$user->id);
-
     }
 
     /**

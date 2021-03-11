@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc315b6247eacb09690c40675f83c092",
+    "content-hash": "4014a85548839801b109309e682998cf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -57,54 +57,6 @@
                 "stack"
             ],
             "time": "2020-10-29T16:03:21+00:00"
-        },
-        {
-            "name": "avihs/laravel-post-comment-reply",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/shivragshukla/laravel-post-comment-reply.git",
-                "reference": "add9619bd13b6cd729661721bb724f5355de1ab0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/shivragshukla/laravel-post-comment-reply/zipball/add9619bd13b6cd729661721bb724f5355de1ab0",
-                "reference": "add9619bd13b6cd729661721bb724f5355de1ab0",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2.5"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Avihs\\PostReply\\PostCommentReplyServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Avihs\\PostReply\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Shivrag",
-                    "email": "shivrag.shukla001@gmail.com"
-                }
-            ],
-            "description": "This will create a post, comment, likes and reply & save in database",
-            "keywords": [
-                "comments",
-                "posts",
-                "replies"
-            ],
-            "time": "2020-09-05T17:02:41+00:00"
         },
         {
             "name": "brick/math",

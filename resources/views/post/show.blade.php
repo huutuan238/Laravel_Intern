@@ -38,6 +38,18 @@
                       <?php
                       }?>
                     </div>
+                         <a href="{{URL::to('/add-reply/'.$comment->post_id.'/'.$comment->id)}}" class="profile-link">Reply</a>
+                        @if($comment->likes->count()== 0)
+                            <a href="{{URL::to('/like/'.$user->id.'/'.$post->id.'/'.$comment->id)}}" class="btn text-green"><i class="icon ion-thumbsup"></i></a>
+                        @else
+                          @foreach ($comment->likes as $like)
+                            @if($like->user_id == $user->id )
+                            <a href="{{URL::to('/dislike/'.$user->id.'/'.$post->id.'/'.$comment->id.'/'.$like->id)}}" class="btn text-red"><i class="fa fa-thumbs-down"></i></a>
+                            @else
+                                  <a href="{{URL::to('/like/'.$user->id.'/'.$post->id.'/'.$comment->id)}}" class="btn text-green"><i class="icon ion-thumbsup"></i></a>
+                            @endif
+                          @endforeach
+                        @endif
                         @foreach ($comment->replies as $reply)
                         <div class="comment-reply">
                           <ul>
@@ -48,22 +60,10 @@
                             <a href="{{URL::to('/edit-reply/'.$comment->post_id.'/'.$comment->id.'/'.$reply->id)}}" class="profile-link">Edit</a>
                             <a href="{{URL::to('/delete-reply/'.$comment->post_id.'/'.$comment->id.'/'.$reply->id)}}" onclick="return confirm('Are you sure delete reply?')" class="profile-link">Delete</a>
                           @endif
-                          <a href="{{URL::to('/add-reply/'.$comment->post_id.'/'.$comment->id)}}" class="profile-link">Reply</a>
+
                         </div>
                         @endforeach
-                        @if($comment->likes->count()== 0)
-                            <a href="{{URL::to('/like/'.$user->id.'/'.$post->id.'/'.$comment->id)}}" class="btn text-green"><i class="icon ion-thumbsup"></i></a>
-<!--                             <a href="{{URL::to('/like/'.$user->id.'/'.$post->id.'/'.$comment->id)}}">Like</a>
- -->                        @else
-                          <p>{{ $comment->likes->count() }}</p>
-                          @foreach ($comment->likes as $like)
-                            @if($like->user_id == $user->id )
-                            <a href="{{URL::to('/dislike/'.$user->id.'/'.$post->id.'/'.$comment->id.'/'.$like->id)}}" class="btn text-red"><i class="fa fa-thumbs-down"></i></a>
-                            @else
-                                  <a href="{{URL::to('/like/'.$user->id.'/'.$post->id.'/'.$comment->id)}}" class="btn text-green"><i class="icon ion-thumbsup"></i></a>
-                            @endif
-                          @endforeach
-                        @endif
+                        <!-- <a href="{{URL::to('/add-reply/'.$comment->post_id.'/'.$comment->id)}}" class="profile-link">Reply</a> -->
                   @endforeach
                   <div class="post-comment">
                     <form action="{{URL::to('save-comment/'.$post->id)}}" method="post">

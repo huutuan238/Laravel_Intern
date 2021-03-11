@@ -32,11 +32,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $all_post = Post::orderby('id','desc')->get();
+        $all_post = Post::orderby('id', 'desc')->where('status', '1')->get();
         $user = Auth::user();
         $comments = DB::table('posts')
-            ->join('comments','comments.post_id', '=', 'posts.id')
+            ->join('comments', 'comments.post_id', '=', 'posts.id')
             ->get();
-        return view('home')->with('all_post', $all_post)->with('comments', $comments)->with('user', $user);
+        return view('home')->with('all_post', $all_post)
+            ->with('comments', $comments)->with('user', $user);
     }
 }
