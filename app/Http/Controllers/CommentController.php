@@ -93,7 +93,7 @@ class CommentController extends Controller
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
         $comment->save();
-        return Redirect::to('post/'.$post_id);
+        return Redirect::to('home/'.$post_id);
     }
 
     public function like($user_id, $post_id, $comment_id)
@@ -104,6 +104,12 @@ class CommentController extends Controller
         $like->comment_id = $comment_id;
         $like->status = '1';
         $like->save();
+        return Redirect::to('post/'.$post_id);
+    }
+
+    public function dislike($user_id, $post_id, $comment_id, $like_id)
+    {
+        $like = Like::find($like_id)->delete();
         return Redirect::to('post/'.$post_id);
     }
 

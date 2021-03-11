@@ -72,9 +72,12 @@ class ReplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($post_id, $comment_id, $id)
     {
-        return view('reply.edit');
+        $reply = Reply::find($id);
+        $comment = Comment::find($comment_id);
+        $user = Auth::user();
+        return view('reply.edit')->with('comment', $comment)->with('reply', $reply)->with('user', $user);
     }
 
     /**
@@ -84,9 +87,14 @@ class ReplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $post_id, $comment_id, $id)
     {
-        //
+        $reply = Reply::find($id);
+        $reply->user_id = auth()->id();
+        $reply->comment_id = $comment_id;
+        $reply->content = $request->content;
+        $reply->save();
+        return Redirect::to('post/'.$post_id);
     }
 
     /**
@@ -95,8 +103,9 @@ class ReplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($post_id, $comment_id, $reply_id)
     {
-        echo "this is delete reply page";
+        Reply::find($reply_id)->delete();
+        return Redirect::to('post/'.$post_id);
     }
 }

@@ -34,12 +34,13 @@ Route::get('/edit-comment/{post_id}/{comment_id}', 'CommentController@edit');
 Route::post('/update-comment/{post_id}/{comment_id}', 'CommentController@update');
 Route::get('/delete-comment/{post_id}/{comment_id}', 'CommentController@destroy');
 Route::get('/like/{user_id}/{post_id}/{comment_id}', 'CommentController@like');
-
+Route::get('/dislike/{user_id}/{post_id}/{comment_id}/{like_id}', 'CommentController@dislike');
 //Reply
 Route::get('/add-reply/{post_id}/{comment_id}', 'ReplyController@create');
 Route::post('/save-reply/{post_id}/{comment_id}','ReplyController@store');
-Route::get('/edit-reply/{reply_id}', 'ReplyController@edit');
-Route::get('/delete-reply/{reply_id}', 'ReplyController@delete');
+Route::get('/edit-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@edit');
+Route::post('/update-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@update');
+Route::get('/delete-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@destroy');
 
 //User
 Route::get('/profile/{user_id}', 'UserController@show');
