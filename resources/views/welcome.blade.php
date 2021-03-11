@@ -81,7 +81,8 @@
                   <li><a href="">Contact Us</a></li>
                 </ul>
               </li>
-              <li class="dropdown"><a href="{{ URL::to('login') }}">Login</a></li>
+              <li class="dropdown"><a href="logout">Logout</a></li>
+
             </ul>
             <form class="navbar-form navbar-right hidden-sm">
               <div class="form-group">
