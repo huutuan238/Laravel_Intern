@@ -7,31 +7,30 @@
                   <div class="organization">
                     <div class="work-info">
                       <h5>Name</h5>
-                      <span class="text-grey">{{ $user->name }}</span>
+                      <h6 class="text-primary">{{ $user->name }}</h5>
                     </div>
                   </div>
                   <div class="organization">
                     <div class="work-info">
                       <h5>Email</h5>
-                      <span class="text-grey">{{ $user->email }}</span>
+                      <h6 class="text-primary">{{ $user->email }}</h5>
                     </div>
                   </div>
                   <div class="organization">
                     <div class="work-info">
                       <h5>Phone</h5>
-                      <span class="text-grey">{{ $user->phone }}</span>
+                      <h6 class="text-primary">{{ $user->phone }}</h5>
                     </div>
                   </div>
                   <div class="organization">
                     <div class="work-info">
                       <h5>Image</h5>
-                      <span class="text-grey">{{ $user->image }}</span>
+                      <h6 class="text-primary">{{ $user->image }}</h5>
                     </div>
                   </div>
                   <div class="organization">
                     <div class="work-info">
                       <a class="text-grey" href="{{URL::to('/edit-profile/'.$user->id)}}">Edit</a>
-                      <!-- <span class="text-grey">{{ $user->name }}</span> -->
                     </div>
                   </div>
                 </div>

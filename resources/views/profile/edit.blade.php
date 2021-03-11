@@ -1,8 +1,8 @@
 @extends('welcome')
 
 @section('content')
-              <div class="about-profile" style="font-size: 20px;height: 200px;">
-                <form action="{{ URL::to('/update-profile/'.$user->id) }}" method="post" style="height: 200px;">
+              <div class="about-profile" style="font-size: 20px;">
+                <form action="{{ URL::to('/update-profile/'.$user->id) }}" method="post">
                   @csrf
                   <div class="about-content-block">
                     <h4 class="grey"><i class="ion-ios-briefcase-outline icon-in-title"></i>Update Profile</h4>
@@ -29,7 +29,7 @@
                         <input style="width:95%;"type="text" value="{{ $user->image }}" name="image" class="text-grey">
                       </div>
                     </div>
-                    <input class="btn btn-primary pull-right" type="submit" name="submit">
+                    <input class="btn btn-primary pull-right" type="submit" name="Update">
                   </div>
                 </form>
               </div>

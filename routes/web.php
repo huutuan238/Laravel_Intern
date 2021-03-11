@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,31 +17,34 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //Post
-Route::get('/post', 'PostController@index');
-Route::get('/add-post','PostController@create')->middleware('auth');
-Route::post('/save-post','PostController@store');
-Route::get('/edit-post/{post_id}', 'PostController@edit');
+Route::get('/post', 'PostController@index')->middleware('auth');
+Route::get('/add-post', 'PostController@create')->middleware('auth');
+Route::post('/save-post', 'PostController@store');
+Route::get('/edit-post/{post_id}', 'PostController@edit')->middleware('auth');
 Route::post('/update-post/{post_id}', 'PostController@update');
-Route::get('/delete-post/{post_id}', 'PostController@destroy');
-Route::get('/post/{post_id}', 'PostController@show');
+Route::get('/delete-post/{post_id}', 'PostController@destroy')->middleware('auth');
+Route::get('/post/{post_id}', 'PostController@show')->middleware('auth');
 
 //Comment
-Route::get('/add-comment', 'CommentController@create');
-Route::post('/save-comment/{post_id}','CommentController@store');
-Route::get('/edit-comment/{post_id}/{comment_id}', 'CommentController@edit');
+Route::get('/add-comment', 'CommentController@create')->middleware('auth');
+Route::post('/save-comment/{post_id}', 'CommentController@store');
+Route::get('/edit-comment/{post_id}/{comment_id}', 'CommentController@edit')->middleware('auth');
 Route::post('/update-comment/{post_id}/{comment_id}', 'CommentController@update');
-Route::get('/delete-comment/{post_id}/{comment_id}', 'CommentController@destroy');
-Route::get('/like/{user_id}/{post_id}/{comment_id}', 'CommentController@like');
-Route::get('/dislike/{user_id}/{post_id}/{comment_id}/{like_id}', 'CommentController@dislike');
+Route::get('/delete-comment/{post_id}/{comment_id}', 'CommentController@destroy')->middleware('auth');
+Route::get('/like/{user_id}/{post_id}/{comment_id}', 'CommentController@like')->middleware('auth');
+Route::get('/dislike/{user_id}/{post_id}/{comment_id}/{like_id}', 'CommentController@dislike')->middleware('auth');
+
 //Reply
-Route::get('/add-reply/{post_id}/{comment_id}', 'ReplyController@create');
-Route::post('/save-reply/{post_id}/{comment_id}','ReplyController@store');
+Route::get('/add-reply/{post_id}/{comment_id}', 'ReplyController@create')->middleware('auth');
+Route::post('/save-reply/{post_id}/{comment_id}', 'ReplyController@store')->middleware('auth');
 Route::get('/edit-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@edit');
-Route::post('/update-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@update');
-Route::get('/delete-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@destroy');
+Route::post('/update-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@update')->middleware('auth');
+Route::get('/delete-reply/{post_id}/{comment_id}/{reply_id}', 'ReplyController@destroy')->middleware('auth');
 
 //User
-Route::get('/profile/{user_id}', 'UserController@show');
-Route::get('/edit-profile/{user_id}', 'UserController@edit');
-Route::post('/update-profile/{user_id}','UserController@update');
+Route::get('/profile/{user_id}', 'UserController@show')->middleware('auth');
+Route::get('/edit-profile/{user_id}', 'UserController@edit')->middleware('auth');
+Route::post('/update-profile/{user_id}', 'UserController@update');
+Route::get('/my-post/{user_id}', 'UserController@my_post')->middleware('auth');

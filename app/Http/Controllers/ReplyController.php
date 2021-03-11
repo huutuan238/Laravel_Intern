@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Controllers\Controller;
-use App\Models\User;use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;
@@ -76,7 +76,7 @@ class ReplyController extends Controller
     {
         $reply = Reply::find($id);
         $comment = Comment::find($comment_id);
-        $user = Auth::user();
+        $user = Auth::user(); # TODO: dong nay bi lap lai vai lan, nen dua vao middleware --> $currentUser
         return view('reply.edit')->with('comment', $comment)->with('reply', $reply)->with('user', $user);
     }
 
