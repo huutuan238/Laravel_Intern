@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;
@@ -11,8 +12,6 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
-
-
 
 class CommentController extends Controller
 {
@@ -42,11 +41,8 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$post_id)
+    public function store(Request $request, $post_id)
     {
-        // $post_id = Post::find($request->post_id);
-        // $data = $request->all();
-        // print_r($data);
         $comment = new Comment();
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
@@ -86,14 +82,14 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$post_id, $id)
+    public function update(Request $request, $post_id, $id)
     {
 
         $comment = Comment::find($id);
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
         $comment->save();
-        return Redirect::to('home/'.$post_id);
+        return Redirect::to('post/'.$post_id);
     }
 
     public function like($user_id, $post_id, $comment_id)

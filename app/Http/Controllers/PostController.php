@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Controllers\Controller;
-use App\Models\User;use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;

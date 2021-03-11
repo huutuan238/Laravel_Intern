@@ -2,33 +2,23 @@
 
 @section('content')
             <div class="create-post">
-              <form action="{{URL::to('/update-post/'.$edit_post->id)}}" method="post">
-                @csrf
-                <div class="row">
-                  <div class="col-md-7 col-sm-7">
-                    <div class="form-group">
-                      <img src="images/users/user-1.jpg" alt="" class="profile-photo-md" />
-                      <textarea name="content" id="exampleTextarea" cols="30" rows="1" class="form-control">{{$edit_post->content}}</textarea>
-                    </div>
-                    <label for="inputSuccess">Hiển thị</label>
-                    <select name="status">
-                          <option value="0">Ẩn</option>
-                          <option value="1">Hiện</option>
-                    </select>
-                  </div>
-                  <div class="col-md-5 col-sm-5">
-                    <div class="tools">
-                      <ul class="publishing-tools list-inline">
-                        <li><a href="#"><i class="ion-compose"></i></a></li>
-                        <li><a href="#"><i class="ion-images"></i></a></li>
-                        <li><a href="#"><i class="ion-ios-videocam"></i></a></li>
-                        <li><a href="#"><i class="ion-map"></i></a></li>
-                      </ul>
-                      <!-- <button class="btn btn-primary pull-right">Publish</button> -->
-                      <input class="btn btn-primary pull-right" type="submit" name="submit">
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-sm-2">
+                  <img class="rounded-circle " src="{{asset('images/users/user-1.jpg')}}" alt="user" width="40px">
                 </div>
-              </form>
-            </div><!-- Post Create Box End-->
+                <div class="col-sm-10 col-md-10 m-auto">
+                  <form class="form-inline" action="{{URL::to('/save-post')}}" method="post">
+                    @csrf
+                    <div class="form-group">
+                      <textarea class="form-control" name="content" cols="30" rows="1">{{$edit_post->content}}</textarea>
+                      <select name="status" class="custom-select-sm ml-1">
+                        <option  value="1">Hien</option>
+                        <option  value="0">An</option>
+                      </select>
+                      <button class="btn btn-primary ml-2" type="submit">Post</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
 @endsection
