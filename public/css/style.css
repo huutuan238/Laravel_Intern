@@ -1,0 +1,10 @@
+.content{
+  padding: 20px;
+}
+textarea{
+  resize: none;
+}
+.sign-up-form h2 {
+    font-family: 'Agency FB', sans-serif;
+    margin: 100px 0 20px;
+}
