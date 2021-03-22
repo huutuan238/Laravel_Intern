@@ -18,7 +18,6 @@ class CreateLikesTable extends Migration
             $table->integer('user_id')->index();
             $table->integer('post_id')->index();
             $table->integer('comment_id')->index();
-            $table->integer('status');
             $table->timestamps();
         });
     }

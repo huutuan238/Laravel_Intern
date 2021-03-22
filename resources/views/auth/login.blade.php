@@ -33,7 +33,10 @@
               </div>
               <div class="text-center">
                   <a class="text-light" href="{{ route('register') }}">Already have an account?</a>
-                </div>
+              </div>
+              <div class="text-center">
+                  <a class="text-light" href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
+              </div>
             </div><!-- Sign Up Form End -->
           </div>
           <div class="col-4">

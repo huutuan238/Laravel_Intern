@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->integer('user_id')->index();
             $table->text('content');
-            $table->integer('status')->defauly('1');
+            $table->enum('status', ['public', 'private']);
             $table->timestamps();
         });
     }

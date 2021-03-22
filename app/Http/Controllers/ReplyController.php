@@ -12,7 +12,9 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Reply;
 use Illuminate\Support\Facades\Auth;
-use DB;
+use App\Http\Requests\StoreRequest;
+use Mail;
+use App\Mail\ReplyComment;
 
 class ReplyController extends Controller
 {
@@ -21,6 +23,11 @@ class ReplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         //
@@ -33,7 +40,6 @@ class ReplyController extends Controller
      */
     public function create($post_id, $comment_id)
     {
-        // $post = Post::find($post_id);
         $comment = Comment::find($comment_id);
         $user = Auth::user();
         return view('reply.add')->with('user', $user)->with('comment', $comment);
@@ -45,14 +51,23 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $post_id, $comment_id)
+    public function store(StoreRequest $request, $post_id, $comment_id)
     {
+        $comment = Comment::find($comment_id);
+        $post = Comment::find($post_id);
         $reply = new Reply();
         $reply->content = $request->content;
         $reply->user_id = auth()->id();
         $reply->comment_id = $comment_id;
-        $reply->save();
-        return Redirect::to('post/'.$post_id);
+        if ($comment->user->id != auth()->id()){
+            Mail::to($comment->user->email)->send(new ReplyComment($reply));
+            $reply->save();
+            return Redirect::to('post/'.$post_id);
+        }
+        else{
+            $reply->save();
+            return Redirect::to('post/'.$post_id);
+        }
     }
 
     /**
@@ -87,7 +102,7 @@ class ReplyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $post_id, $comment_id, $id)
+    public function update(StoreRequest $request, $post_id, $comment_id, $id)
     {
         $reply = Reply::find($id);
         $reply->user_id = auth()->id();

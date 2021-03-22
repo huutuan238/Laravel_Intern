@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;
 use App\Models\Post;
 use DB;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -30,7 +31,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $all_post = Post::orderby('id', 'desc')->where('status', '1')->get(); # TODO: where('status', '1') --> chuyen sang enum, va dung scope
+        // $startDay = Carbon::now()->startOfDay();
+        $today = Carbon::now();
+        // $all_post = Post::orderby('id', 'desc')->where('status', 1)->whereDay('created_at', $today)->get(); # TODO: where('status', '1') --> chuyen sang enum, va dung scope
+        $all_post = Post::showpost()->orderBy('id', 'desc')->get();
         $user = Auth::user();
         return view('home')
             ->with('all_post', $all_post)

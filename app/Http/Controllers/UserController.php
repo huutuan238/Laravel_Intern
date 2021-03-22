@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Auth;
+use DB;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -16,20 +18,16 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -37,10 +35,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
 
     /**
      * Display the specified resource.
@@ -51,7 +49,11 @@ class UserController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        return view('profile.show')->with('user', $user);
+        if ($user->id != $id) {
+            return Redirect::to('home');
+        } else {
+            return view('profile.show')->with('user', $user);
+        }
     }
 
     /**
@@ -63,7 +65,11 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        return view('profile.edit')->with('user', $user);
+        if ($user->id == $id) {
+            return view('profile.edit')->with('user', $user);
+        } else {
+            return Redirect::to('home');
+        }
     }
 
     /**
@@ -80,13 +86,9 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->image = $request->image;
-        // $user->username = auth
         $user->image = $request->image;
         $user->save();
         return Redirect::to('/profile/'.$user->id);
-    }
-    public function my_post($id){
-        return view('post.mypost');
     }
     /**
      * Remove the specified resource from storage.
@@ -94,8 +96,8 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }
