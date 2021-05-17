@@ -12,6 +12,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRequest;
+use Pusher\Pusher;
 
 class PostController extends Controller
 {
@@ -44,6 +45,23 @@ class PostController extends Controller
         $post->user_id = auth()->id();
         $post->status = $request->status;
         $post->save();
+        //realtime notification
+        $data['title'] = 'this_title';
+        $data['content'] = $request->content;
+        $options = array(
+            'cluster' => 'ap1',
+            'encrypted' => true
+        );
+
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+
+        $pusher->trigger('NotificationEvent', 'send-message', $data);
+
         return Redirect::to('home');
     }
 

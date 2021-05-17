@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRequest;
 use Mail;
 use App\Mail\CommentPost;
+use App\Notifications\TestNotification;
+use Pusher\Pusher;
+use DB;
 
 class CommentController extends Controller
 {
@@ -48,19 +51,40 @@ class CommentController extends Controller
     {
         $comment = new Comment();
         $post = Post::findOrFail($post_id);
-        $user = Auth::user();
+        // $user = Auth::user();
+        $user  = $post->user;
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
         $comment->post_id = $post_id;
-        if ($post->user->id != auth()->id()) {
-            Mail::to($post->user->email)->send(new CommentPost($comment));
-            $comment->save();
-            return Redirect::to('post/'.$post_id);
-         }
-        else {
-            $comment->save();
-            return Redirect::to('post/'.$post_id);
-        }
+        $data['content'] = $request->content;
+        $data['user'] = Auth::user()->name;
+        $data['post_id'] = $post_id;
+        $user->notify(new TestNotification($data));
+        $options = array(
+            'cluster' => 'ap1',
+            'encrypted' => true
+        );
+
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+
+        $pusher->trigger('NotificationEvent', 'send-message', $data);
+        $comment->save();
+        return Redirect::to('post/'.$post_id);
+        //send mail
+        // if ($post->user->id != auth()->id()) {
+        //     Mail::to($post->user->email)->send(new CommentPost($comment));
+        //     $comment->save();
+        //     return Redirect::to('post/'.$post_id);
+        //  }
+        // else {
+        //     $comment->save();
+        //     return Redirect::to('post/'.$post_id);
+        // }
     }
 
     /**
