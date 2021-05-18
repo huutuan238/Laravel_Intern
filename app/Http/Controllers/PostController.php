@@ -11,7 +11,9 @@ use App\Http\Requests;
 use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
-use DB;
+use App\Http\Requests\StoreRequest;
+use Pusher\Pusher;
+use Elasticsearch\ClientBuilder;
 
 class PostController extends Controller
 {
@@ -20,9 +22,9 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function __construct()
     {
-        return view('home');
+        $this->middleware('auth');
     }
 
     /**
@@ -30,10 +32,6 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('post.add');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -41,14 +39,27 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $data = $request->all();
+        $id = 10;
         $post = new Post();
-        $post->content = $data['content'];
+        $post->content = $request->content;
         $post->user_id = auth()->id();
-        $post->status = $data['status'];
+        $post->status = $request->status;
         $post->save();
+        $client = ClientBuilder::create()->build();
+        $user_name = Auth::user()->name;
+        $params = [
+            'index' => 'my_index',
+            'id'    => $post->id,
+            'body'  => [
+                'id' => $post->id,
+                'user_name' => $user_name,
+                'content' => $post->content,
+            ]
+        ];
+        
+        $client->index($params);
         return Redirect::to('home');
     }
 
@@ -60,10 +71,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
         $user = Auth::user();
-        // $name = User::find($post->user_id);
-        // $comments = $post->comments;
         return view('post.show')->with('post', $post)->with('user', $user);
     }
 
@@ -75,8 +84,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $edit_post = Post::find($id);
+        $edit_post = Post::findOrFail($id);
         $user = Auth::user();
+        $this->authorize('update', $edit_post);
         return view('post.edit')->with('edit_post', $edit_post)->with('user', $user);
     }
 
@@ -87,14 +97,28 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, $id)
     {
+        $user = Auth::user();
         $data = $request->all();
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
+        $this->authorize('update', $post);
         $post->content = $data['content'];
-        $post->user_id = auth()->id();
+        $post->user_id = $user->id;
         $post->status = $data['status'];
         $post->save();
+        $client = ClientBuilder::create()->build();
+        $params = [
+            'index' => 'my_index',
+            'id'    => $id,
+            'body'  => [
+                'id' => $post->id,
+                'user_name' => $user->name,
+                'content' => $post->content
+            ]
+        ];
+        
+        $client->index($params);
         return Redirect::to('post/'.$id);
     }
 
@@ -106,7 +130,13 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        Post::find($id)->delete();
+        Post::findOrFail($id)->delete();
+        $client = ClientBuilder::create()->build();
+        $params = [
+            'index' => 'my_index',
+            'id'    => $id
+        ];
+        $client->delete($params);
         return Redirect::to('home');
     }
 }

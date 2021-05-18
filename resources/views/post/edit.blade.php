@@ -7,7 +7,7 @@
                   <img class="rounded-circle " src="{{asset('images/users/user-1.jpg')}}" alt="user" width="40px">
                 </div>
                 <div class="col-sm-10 col-md-10 m-auto">
-                  <form class="form-inline" action="{{URL::to('/save-post')}}" method="post">
+                  <form class="form-inline" action="{{URL::to('/update-post/'.$edit_post->id)}}" method="post">
                     @csrf
                     <div class="form-group">
                       <textarea class="form-control" name="content" cols="30" rows="1">{{$edit_post->content}}</textarea>

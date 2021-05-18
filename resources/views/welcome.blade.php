@@ -18,9 +18,10 @@
         </div>
         <div class="col-sm-4">
           <nav class="navbar">
-            <form class="form-inline m-2" action="" method="">
+            <form class="form-inline m-2" action="/search" method="get">
+              @csrf
               <div class="form-group">
-                <input class="form-control" type="text" name="" placeholder="search">
+                <input class="form-control" type="text" name="search" placeholder="search">
                 <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
               </div>
             </form>
@@ -35,8 +36,20 @@
               <li class="nav-item p-2">
                 <a  class="nav-link" href="{{ URL::to('profile/'.$user->id)}}">Profile</a>
               </li>
-              <li class="nav-item p-2">
-                <a  class="nav-link" href="">MyPost</a>
+              <!-- <li class="nav-item p-2">
+                <a  class="nav-link" href="{{ URL::to('my-post/'.$user->id)}}">MyPost</a>
+              </li> -->
+              <li class="nav-item dropdown dropdown-notifications">
+                  <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                      Notification<span class="caret"></span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right menu-notification" aria-labelledby="navbarDropdown">
+                      @foreach (Auth::user()->notifications as $notification)
+                          <a class="dropdown-item" href="{{ URL::to('post/'.$notification->data['post_id']) }}">
+                              <span>{{ $notification->data['user'].' da cmt bai cua ban' }}</span><br>
+                          </a>
+                      @endforeach
+                  </div>
               </li>
               <li class="nav-item p-2">
                 <a  class="nav-link" href="{{ route('logout')}}">Logout</a>
@@ -88,5 +101,25 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://use.fontawesome.com/releases/v5.15.2/js/all.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://js.pusher.com/4.4/pusher.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        encrypted: true,
+        cluster: "ap1"
+    });
+    var channel = pusher.subscribe('NotificationEvent');
+    channel.bind('send-message', function(data) {
+        var newNotificationHtml = `
+        <a class="dropdown-item" href="{{ URL::to('post/'.'data.post_id') }}">
+          <span>${data.user} da cmt bai cua ban</span><br>
+        </a>
+        `;
+
+        $('.menu-notification').prepend(newNotificationHtml);
+    });
+</script>
 </body>
 </html>

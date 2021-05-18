@@ -12,6 +12,12 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreRequest;
+use Mail;
+use App\Mail\CommentPost;
+use App\Notifications\TestNotification;
+use Pusher\Pusher;
+use DB;
 
 class CommentController extends Controller
 {
@@ -20,9 +26,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     /**
@@ -41,14 +47,44 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $post_id)
+    public function store(StoreRequest $request, $post_id)
     {
         $comment = new Comment();
+        $post = Post::findOrFail($post_id);
+        // $user = Auth::user();
+        $user  = $post->user;
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
         $comment->post_id = $post_id;
+        $data['content'] = $request->content;
+        $data['user'] = Auth::user()->name;
+        $data['post_id'] = $post_id;
+        $user->notify(new TestNotification($data));
+        $options = array(
+            'cluster' => 'ap1',
+            'encrypted' => true
+        );
+
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+
+        $pusher->trigger('NotificationEvent', 'send-message', $data);
         $comment->save();
         return Redirect::to('post/'.$post_id);
+        //send mail
+        // if ($post->user->id != auth()->id()) {
+        //     Mail::to($post->user->email)->send(new CommentPost($comment));
+        //     $comment->save();
+        //     return Redirect::to('post/'.$post_id);
+        //  }
+        // else {
+        //     $comment->save();
+        //     return Redirect::to('post/'.$post_id);
+        // }
     }
 
     /**
@@ -56,11 +92,6 @@ class CommentController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -70,7 +101,9 @@ class CommentController extends Controller
      */
     public function edit($post_id, $id)
     {
-        $edit_comment = Comment::find($id);
+        # TODO: check neu ko thay comment, invalid $id
+        $edit_comment = Comment::findOrFail($id);
+        $this->authorize('update', $edit_comment);
         $user = Auth::user();
         return view('comment.edit')->with('edit_comment', $edit_comment)->with('user', $user);
     }
@@ -82,10 +115,10 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $post_id, $id)
+    public function update(StoreRequest $request, $post_id, $id)
     {
-
-        $comment = Comment::find($id);
+        $comment = Comment::findOrFail($id);
+        $this->authorize('update', $comment);
         $comment->content = $request->content;
         $comment->user_id = auth()->id();
         $comment->save();
@@ -98,14 +131,13 @@ class CommentController extends Controller
         $like->user_id = $user_id;
         $like->post_id = $post_id;
         $like->comment_id = $comment_id;
-        $like->status = '1';
         $like->save();
         return Redirect::to('post/'.$post_id);
     }
 
     public function dislike($user_id, $post_id, $comment_id, $like_id)
     {
-        $like = Like::find($like_id)->delete();
+        $like = Like::findOrFail($like_id)->delete();
         return Redirect::to('post/'.$post_id);
     }
 
@@ -117,7 +149,9 @@ class CommentController extends Controller
      */
     public function destroy($post_id, $id)
     {
-        Comment::find($id)->delete();
+        $comment = Comment::findOrFail($id);
+        $this->authorize('delete', $comment);
+        $comment->delete();
         return Redirect::to('post/'.$post_id);
     }
 }

@@ -11,8 +11,8 @@
                     <div class="form-group">
                       <textarea class="form-control" name="content" cols="30" rows="1"></textarea>
                       <select name="status" class="custom-select-sm ml-1">
-                        <option  value="1">Hien</option>
-                        <option  value="0">An</option>
+                        <option  value="public">Hien</option>
+                        <option  value="private">An</option>
                       </select>
                       <button class="btn btn-primary ml-1" type="submit">Post</button>
                     </div>
