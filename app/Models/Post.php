@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    
 
     protected $fillable = [
         'content','status',
@@ -26,5 +27,12 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    protected static function booted()
+    {
+        static::created(function ($post) {
+            $post->content = $post->content;
+            $post->status = $post->status;
+        });
     }
 }

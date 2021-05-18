@@ -63,7 +63,4 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 //notification realtime
-Route::get('notification', 'SendNotification@create')->name('notification.create');
-Route::post('postMessage', 'SendNotification@store')->name('postMessage');
-
-Route::get('show-notification', 'SendNotification@show');
+Route::get('/search', [App\Http\Controllers\HomeController::class, 'search'])->name('search');

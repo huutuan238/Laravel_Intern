@@ -13,6 +13,7 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreRequest;
 use Pusher\Pusher;
+use Elasticsearch\ClientBuilder;
 
 class PostController extends Controller
 {
@@ -40,28 +41,25 @@ class PostController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $id = 10;
         $post = new Post();
         $post->content = $request->content;
         $post->user_id = auth()->id();
         $post->status = $request->status;
         $post->save();
-        //realtime notification
-        $data['title'] = 'this_title';
-        $data['content'] = $request->content;
-        $options = array(
-            'cluster' => 'ap1',
-            'encrypted' => true
-        );
-
-        $pusher = new Pusher(
-            env('PUSHER_APP_KEY'),
-            env('PUSHER_APP_SECRET'),
-            env('PUSHER_APP_ID'),
-            $options
-        );
-
-        $pusher->trigger('NotificationEvent', 'send-message', $data);
-
+        $client = ClientBuilder::create()->build();
+        $user_name = Auth::user()->name;
+        $params = [
+            'index' => 'my_index',
+            'id'    => $post->id,
+            'body'  => [
+                'id' => $post->id,
+                'user_name' => $user_name,
+                'content' => $post->content,
+            ]
+        ];
+        
+        $client->index($params);
         return Redirect::to('home');
     }
 
@@ -109,6 +107,18 @@ class PostController extends Controller
         $post->user_id = $user->id;
         $post->status = $data['status'];
         $post->save();
+        $client = ClientBuilder::create()->build();
+        $params = [
+            'index' => 'my_index',
+            'id'    => $id,
+            'body'  => [
+                'id' => $post->id,
+                'user_name' => $user->name,
+                'content' => $post->content
+            ]
+        ];
+        
+        $client->index($params);
         return Redirect::to('post/'.$id);
     }
 
@@ -121,6 +131,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         Post::findOrFail($id)->delete();
+        $client = ClientBuilder::create()->build();
+        $params = [
+            'index' => 'my_index',
+            'id'    => $id
+        ];
+        $client->delete($params);
         return Redirect::to('home');
     }
 }

@@ -18,9 +18,10 @@
         </div>
         <div class="col-sm-4">
           <nav class="navbar">
-            <form class="form-inline m-2" action="" method="">
+            <form class="form-inline m-2" action="/search" method="get">
+              @csrf
               <div class="form-group">
-                <input class="form-control" type="text" name="" placeholder="search">
+                <input class="form-control" type="text" name="search" placeholder="search">
                 <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
               </div>
             </form>
