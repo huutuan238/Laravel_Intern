@@ -36,10 +36,10 @@
               <li class="nav-item p-2">
                 <a  class="nav-link" href="{{ URL::to('profile/'.$user->id)}}">Profile</a>
               </li>
-              <!-- <li class="nav-item p-2">
+              <li class="nav-item p-2">
                 <a  class="nav-link" href="{{ URL::to('my-post/'.$user->id)}}">MyPost</a>
-              </li> -->
-              <li class="nav-item dropdown dropdown-notifications">
+              </li>
+              <!-- <li class="nav-item dropdown dropdown-notifications">
                   <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                       Notification<span class="caret"></span>
                   </a>
@@ -50,7 +50,7 @@
                           </a>
                       @endforeach
                   </div>
-              </li>
+              </li> -->
               <li class="nav-item p-2">
                 <a  class="nav-link" href="{{ route('logout')}}">Logout</a>
               </li>
@@ -102,7 +102,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://use.fontawesome.com/releases/v5.15.2/js/all.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://js.pusher.com/4.4/pusher.min.js"></script>
+<!-- <script src="https://js.pusher.com/4.4/pusher.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
@@ -120,6 +120,6 @@
 
         $('.menu-notification').prepend(newNotificationHtml);
     });
-</script>
+</script> -->
 </body>
 </html>
